@@ -34,11 +34,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLocation;
 
     private FusedLocationProviderClient mFusedLocationClient;
-    /*private LocationCallback mHospitalLocationCallback;
-    private LocationCallback mPoliceStationLocationCallback;*/
-
-    /*private static final int REQUEST_LOCATION_PERMISSION_HOSPITAL = 1;
-    private static final int REQUEST_LOCATION_PERMISSION_POLICE_STATION = 2;*/
+   
     private static final int REQUEST_LOCATION_PERMISSION = 3;
 
     @Override
@@ -48,23 +44,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(
                 this);
-
-        /*mHospitalLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                // locationResult.getLastLocation() has the latest device location.
-                new GetNearbyPlacesData().execute(mMap, getUrl(locationResult.getLastLocation().getLatitude(),
-                        locationResult.getLastLocation().getLongitude(), "hospital"));
-            }
-        };*/
-
-        /*mPoliceStationLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                new GetNearbyPlacesData().execute(mMap, getUrl(locationResult.getLastLocation().getLatitude(),
-                        locationResult.getLastLocation().getLongitude(), "police_station"));
-            }
-        };*/
 
         allocateLocation();
 
@@ -84,18 +63,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    
+    //Searching for Police Stations and Hospitals in this project//
+    
     @Override
     public void onMapReady(GoogleMap googleMap){
         mMap = googleMap;
 
-        LatLng home = new LatLng(28.603922, 77.294625);
+        LatLng home = new LatLng(12.09561, 77.669988);
         float zoom = 20;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, zoom));
 
         mHospitalButton = findViewById(R.id.hospitalButton);
         mPoliceStationButton = findViewById(R.id.policeStationButton);
-
-        //initialStart();
 
         mHospitalButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,22 +92,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    /*private void initialStart() {
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSION);
-        }else{
-            mFusedLocationClient.requestLocationUpdates(getLocationRequest(), mHospitalLocationCallback, null);
-        }
-    }*/
-
     private void hospitalButtonFunction(){
-        new GetNearbyPlacesData().execute(mMap, getUrl(mLocation.getLatitude(), mLocation.getLongitude(), "hospital"));
+        new GetNearbyPlacesData().execute(mMap, getUrl(mLocation.getLatitude(), mLocation.getLongitude(), "hospital")); //Change "hospital" as per your requirement
     }
 
     private void policeStationButtonFunction(){
-        new GetNearbyPlacesData().execute(mMap, getUrl(mLocation.getLatitude(), mLocation.getLongitude(), "police_station"));
+        new GetNearbyPlacesData().execute(mMap, getUrl(mLocation.getLatitude(), mLocation.getLongitude(), "police_station")); //Change "police_station" as per your requirement
     }
 
     private LocationRequest getLocationRequest() {
@@ -144,7 +114,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googlePlacesUrl.append("&radius=" + "1000");
         googlePlacesUrl.append("&type=" + nearbyPlace);
         googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("&key=" + "AIzaSyD1u6nTZuCFYVPZVwl0haVIZFI1zEiYi2I");
+        googlePlacesUrl.append("&key=" + "AIza...."); // Enter your API Key here. DO NOT restrict it to Android Applications. 
         Log.d("getUrl", googlePlacesUrl.toString());
         return (googlePlacesUrl.toString());
     }
@@ -174,22 +144,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText(this, "Permission Needed :(", Toast.LENGTH_SHORT).show();
                 }
                 break;
-
-            /*case REQUEST_LOCATION_PERMISSION:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    hospitalButtonFunction();
-                }else{
-                    Toast.makeText(this, "Permission Denied :(", Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            case REQUEST_LOCATION_PERMISSION_POLICE_STATION:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    policeStationButtonFunction();
-                }else{
-                    Toast.makeText(this, "Permission Denied :(", Toast.LENGTH_SHORT).show();
-                }
-                break;*/
 
             default: Toast.makeText(this, "Permission Denied :(", Toast.LENGTH_SHORT).show();
         }
